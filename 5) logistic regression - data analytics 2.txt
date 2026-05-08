@@ -1,0 +1,186 @@
+
+# -----------------------------------------------------
+# 1. Import Required Libraries
+# -----------------------------------------------------
+
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import confusion_matrix
+
+
+# -----------------------------------------------------
+# 2. Load Dataset
+# -----------------------------------------------------
+
+
+df = pd.read_csv("https://github.com/wise-venture18/dsbdal/raw/refs/heads/main/5.LogisticReg_SocialNetwork/Social_Network_Ads.csv")
+
+print(df.head())
+
+
+# -----------------------------------------------------
+# 3. Dataset Information
+# -----------------------------------------------------
+
+print("\nDataset Information:")
+print(df.info())
+df.describe()
+df.shape
+
+
+# -----------------------------------------------------
+# 4. Select Features and Target Variable
+# -----------------------------------------------------
+
+# Age and EstimatedSalary -> input features
+# Purchased -> target variable
+
+X = df[['Age', 'EstimatedSalary']] # age and estimated salary are independent variables and are used to calculate the pusrchased value(dependent variable)
+y = df['Purchased']
+
+
+# -----------------------------------------------------
+# 5. Split Dataset
+# -----------------------------------------------------
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42
+)
+
+# 80% training data
+# 20% testing data
+
+
+# -----------------------------------------------------
+# 6. Feature Scaling
+# -----------------------------------------------------
+"""Salary values are much larger than Age values.
+Because of this:
+			larger values dominate calculations
+			model training may become less efficient
+			So scaling brings features to similar range."""
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+"""
+fit_transform() does TWO operations:
+calculates mean and standard deviation of training data
+scales the data using those values
+It converts features into similar scale.
+This improves Logistic Regression performance.
+
+transform() scales test data using SAME mean and standard deviation learned from training data.
+It does NOT calculate new values again.
+This keeps training and testing data on same scale.
+Using only transform() avoids data leakage"""
+
+
+# -----------------------------------------------------
+# 7. Train Logistic Regression Model
+# -----------------------------------------------------
+
+model = LogisticRegression()
+
+model.fit(X_train, y_train)
+
+# fit() trains the model
+
+
+# -----------------------------------------------------
+# 8. Predict Values
+# -----------------------------------------------------
+
+y_pred = model.predict(X_test)
+
+print("\nPredicted Values:")
+print(y_pred[:5]) # prints the first 5 predicted values
+
+
+# -----------------------------------------------------
+# 9. Confusion Matrix
+# -----------------------------------------------------
+
+cm = confusion_matrix(y_test, y_pred)
+
+print("\nConfusion Matrix:")
+print(cm)
+
+
+# -----------------------------------------------------
+# 10. Extract TP, FP, TN, FN
+# -----------------------------------------------------
+"""cm is the confusion matrix generated after prediction.
+These lines extract values of:
+TP → True Positive
+FP → False Positive
+TN → True Negative
+FN → False Negative
+They help evaluate classification model performance.
+These values are later used to calculate accuracy, precision, recall and error rate."""
+
+TN = cm[0][0]
+FP = cm[0][1]
+FN = cm[1][0]
+TP = cm[1][1]
+
+print("\nTrue Positive (TP):", TP)
+print("False Positive (FP):", FP)
+print("True Negative (TN):", TN)
+print("False Negative (FN):", FN)
+
+
+# -----------------------------------------------------
+# 11. Accuracy
+# -----------------------------------------------------
+
+accuracy = (
+    (TP + TN) /
+    (TP + TN + FP + FN)
+)
+
+print("\nAccuracy:")
+print(accuracy)
+"""Measures how many predictions made by the model are correct.
+Higher accuracy means better model performance."""
+
+
+# -----------------------------------------------------
+# 12. Error Rate
+# -----------------------------------------------------
+
+error_rate = 1 - accuracy
+
+print("\nError Rate:")
+print(error_rate)
+"""Measures how many predictions made by the model are wrong.
+Lower error rate indicates better performance."""
+
+# -----------------------------------------------------
+# 13. Precision
+# -----------------------------------------------------
+
+precision = TP / (TP + FP)
+
+print("\nPrecision:")
+print(precision)
+"""Measures how many predicted positive values are actually correct.
+Used when false positive predictions are important"""
+
+
+# -----------------------------------------------------
+# 14. Recall
+# -----------------------------------------------------
+
+recall = TP / (TP + FN)
+
+print("\nRecall:")
+print(recall)
+"""Measures how many actual positive values are correctly identified by model.
+Used when false negatives are important."""
