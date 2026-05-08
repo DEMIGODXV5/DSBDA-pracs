@@ -66,7 +66,12 @@ for species in species_list:
     print("\n========================") 
     print("Species:", species) 
     print("========================")
-    data = df[df['species'] == species] # here the data contains onyl the rows for the particular species.
+    data = df[df['species'] == species] 
+"""here the data contains onyl the rows for the particular species.
+    df['species'] == species creates a True/False condition by checking matching species values.
+    Outer df[...] uses this condition to filter and select only matching rows.
+    Result is a new dataframe containing data of that particular species only.
+"""
 
     print("\nMean:")
     print(data.mean(numeric_only=True)) 
