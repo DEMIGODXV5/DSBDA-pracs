@@ -93,3 +93,5 @@ for species in species_list:
 
     print("\nVariance:")
     print(data.var(numeric_only=True))
+
+    # Instead of all the above methods.. starting from mean to std.. you can cut all those and use data.describe() as it gives - mean , std , min, max, 25% , 50%(median) , 75%. just use data.var separatelt as it isnt included in descirbe()
