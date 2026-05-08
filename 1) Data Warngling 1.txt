@@ -1,0 +1,86 @@
+import pandas as pd
+import numpy as np
+
+
+df=pd.read_csv("https://github.com/wise-venture18/dsbdal/raw/refs/heads/main/1.DataWrangling1/titanic.csv")
+
+
+df.head()
+df.tail()
+df.shape # GIVES NO OF ROWS AND COLUMNS
+df.info() # SHOWS COLUMN NAMES , NON-NULL VALUES , DATATYPES
+
+
+df.describe(include="all") # include ="all" gives summary of numerical as well as categorial variables
+
+
+df.columns
+df.dtypes
+
+
+print("\nMissing Values:")
+print(df.isnull().sum())
+
+
+# -----------------------------------------------------
+#  Handle Missing Values
+# -----------------------------------------------------
+# Fill missing Age values with mean
+df['Age'] = df['Age'].fillna(df['Age'].mean())
+# Fill missing Embarked values with mode
+df['Embarked'] = df['Embarked'].fillna(df['Embarked'].mode()[0])
+# Fill missing Cabin values with Unknown
+df['Cabin'] = df['Cabin'].fillna("Unknown")
+print("\nMissing Values After Handling:")
+print(df.isnull().sum())
+
+
+ -----------------------------------------------------
+ Data Type Conversion
+# -----------------------------------------------------
+df['PassengerId']=df['PassengerId'].astype(str)
+#data types after conversion
+df.dtypes
+#PassengerId was converted to string because it is an identifier and not used for calculations. In pandas, string datatype is represented as object."
+
+
+# -----------------------------------------------------
+#  Data Normalization
+# -----------------------------------------------------
+df['Age_Normalized'] = (
+    (df['Age'] - df['Age'].min()) /(df['Age'].max() - df['Age'].min())
+)
+#xnorm​ = (x-xmin) / (xmax-xmin) brings the range between 0 and 1
+print("\nNormalized Age:")
+df[['Age', 'Age_Normalized']].head()
+
+
+# -----------------------------------------------------
+#  Convert Categorical to Numerical
+# -----------------------------------------------------
+df['Sex'] = df['Sex'].map({
+    'male': 0,
+    'female': 1
+})
+print("\nAfter Label Encoding:")
+df[['Sex']].head()
+
+
+# -----------------------------------------------------
+#  Final Dataset
+# -----------------------------------------------------
+print("\nFinal Dataset:")
+df.head()
+
+print("\nFinal Shape:")
+df.info()
+
+
+
+
+
+
+
+
+
+
