@@ -1,0 +1,165 @@
+"""Naive Bayes is a supervised machine learning classification algorithm based on Bayes Theorem.
+It is used to predict categories/classes such as spam/not spam or flower species.
+It is called “Naive” because it assumes all features are independent of each other."""
+
+# -----------------------------------------------------
+# 1. Import Required Libraries
+# -----------------------------------------------------
+
+import pandas as pd
+
+from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
+from sklearn.metrics import confusion_matrix
+
+# GaussianNB -> Naive Bayes classifier
+
+
+
+# -----------------------------------------------------
+# 2. Load Dataset
+# -----------------------------------------------------
+
+df = pd.read_csv("https://github.com/wise-venture18/dsbdal/raw/refs/heads/main/6.NaiveBayes/iris.csv")
+
+print(df.head())
+
+
+# -----------------------------------------------------
+# 3. Dataset Information
+# -----------------------------------------------------
+
+print("\nDataset Information:")
+print(df.info())
+df.describe()
+df.shape
+
+# -----------------------------------------------------
+# 4. Select Features and Target Variable
+# -----------------------------------------------------
+
+# Features -> flower measurements
+# Target -> Species
+"""drop() removes the species column from dataset.
+axis=1 means column operation.
+Remaining columns become input features (X) for model training.
+species is removed because it is the target/output variable to predict.
+The resulting X contains only numeric feature columns like sepal length, sepal width, etc."""
+
+X = df.drop('species', axis=1)
+
+y = df['species']
+
+
+# -----------------------------------------------------
+# 5. Split Dataset
+# -----------------------------------------------------
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y,
+    test_size=0.2,
+    random_state=42
+)
+
+# 80% training data
+# 20% testing data
+
+
+# -----------------------------------------------------
+# 6. Train Naive Bayes Model
+# -----------------------------------------------------
+"""GaussianNB() creates a Naive Bayes classification model based on Gaussian (normal) distribution.
+It assumes that numeric features follow a bell-shaped normal distribution.
+fit() trains the model using training data and learns relationship between features and classes."""
+
+model = GaussianNB()
+
+model.fit(X_train, y_train)
+
+# fit() trains the model
+
+
+# -----------------------------------------------------
+# 7. Predict Values
+# -----------------------------------------------------
+
+y_pred = model.predict(X_test)
+
+print("\nPredicted Values:")
+print(y_pred[:5])
+
+
+# -----------------------------------------------------
+# 8. Confusion Matrix
+# -----------------------------------------------------
+
+cm = confusion_matrix(y_test, y_pred)
+
+print("\nConfusion Matrix:")
+print(cm)
+
+
+# -----------------------------------------------------
+# 9. Extract TP, FP, TN, FN
+# -----------------------------------------------------
+
+# Using first class values
+
+TP = cm[0][0]
+FP = cm[0][1]
+FN = cm[1][0]
+TN = cm[1][1]
+
+print("\nTrue Positive (TP):", TP)
+print("False Positive (FP):", FP)
+print("False Negative (FN):", FN)
+print("True Negative (TN):", TN)
+
+
+# -----------------------------------------------------
+# 10. Accuracy
+# -----------------------------------------------------
+
+accuracy = (
+    (TP + TN) /
+    (TP + TN + FP + FN)
+)
+
+print("\nAccuracy:")
+print(accuracy)
+"""Measures how many predictions made by the model are correct.
+Higher accuracy means better model performance."""
+
+
+# -----------------------------------------------------
+# 11. Error Rate
+# -----------------------------------------------------
+
+error_rate = 1 - accuracy
+
+print("\nError Rate:")
+print(error_rate)
+"""Measures how many predictions made by the model are wrong.
+Lower error rate indicates better performance."""
+
+# -----------------------------------------------------
+# 12. Precision
+# -----------------------------------------------------
+
+precision = TP / (TP + FP)
+
+print("\nPrecision:")
+print(precision)
+"""Measures how many predicted positive values are actually correct.
+Used when false positive predictions are important"""
+
+# -----------------------------------------------------
+# 13. Recall
+# -----------------------------------------------------
+
+recall = TP / (TP + FN)
+
+print("\nRecall:")
+print(recall)
+"""Measures how many actual positive values are correctly identified by model.
+Used when false negatives are important."""
