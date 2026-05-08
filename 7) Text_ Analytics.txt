@@ -1,0 +1,143 @@
+
+
+# -----------------------------------------------------
+# 1. Import Required Libraries
+# -----------------------------------------------------
+
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+# nltk -> natural language processing
+# word_tokenize -> tokenization
+# stopwords -> remove stop words
+# PorterStemmer -> stemming
+# WordNetLemmatizer -> lemmatization
+# TfidfVectorizer -> TF-IDF calculation
+
+
+# -----------------------------------------------------
+# 2. Download NLTK Resources
+# -----------------------------------------------------
+
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet')
+
+
+# -----------------------------------------------------
+# 3. Sample Document
+# -----------------------------------------------------
+
+text = """
+Text analytics is the process of converting unstructured text into meaningful data.
+Natural Language Processing helps computers understand human language.
+"""
+
+print("Original Text:")
+print(text)
+
+
+# -----------------------------------------------------
+# 4. Tokenization
+# -----------------------------------------------------
+
+tokens = word_tokenize(text)
+
+print("\nTokens:")
+print(tokens)
+
+# Tokenization splits text into words
+
+
+# -----------------------------------------------------
+# 5. POS Tagging
+# -----------------------------------------------------
+
+pos_tags = nltk.pos_tag(tokens)
+
+print("\nPOS Tags:")
+print(pos_tags)
+
+# POS tagging identifies parts of speech
+# Example:
+# NN -> noun
+# VB -> verb
+
+
+# -----------------------------------------------------
+# 6. Stop Words Removal
+# -----------------------------------------------------
+
+sw_nltk = stopwords.words('english')
+print(sw_nltk)
+
+stop_words = set(stopwords.words('english'))
+filtered_tokens = [
+    word for word in tokens
+    if word.lower() not in stop_words
+]
+
+print("After Stopword Removal:\n")
+print(filtered_tokens)
+
+# Removes common words like:
+# is, the, a, an
+
+
+# -----------------------------------------------------
+# 7. Stemming
+# -----------------------------------------------------
+
+stemmer = PorterStemmer()
+
+stemmed_words = [
+    stemmer.stem(word)
+    for word in filtered_words
+]
+
+print("\nStemmed Words:")
+print(stemmed_words)
+
+# Stemming reduces words to root form
+
+
+# -----------------------------------------------------
+# 8. Lemmatization
+# -----------------------------------------------------
+
+lemmatizer = WordNetLemmatizer()
+
+lemmatized_words = [
+    lemmatizer.lemmatize(word)
+    for word in filtered_words
+]
+
+print("\nLemmatized Words:")
+print(lemmatized_words)
+
+# Lemmatization converts words
+# into meaningful root words
+
+
+# -----------------------------------------------------
+# 9. TF-IDF Representation
+# -----------------------------------------------------
+
+documents = [text]
+
+vectorizer = TfidfVectorizer()
+
+tfidf = vectorizer.fit_transform(documents)
+
+print("\nTF-IDF Matrix:")
+print(tfidf.toarray())
+
+print("\nFeature Names:")
+print(vectorizer.get_feature_names_out())
+
+# TF-IDF calculates importance of words
