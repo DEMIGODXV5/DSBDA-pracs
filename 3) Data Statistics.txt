@@ -1,0 +1,90 @@
+import pandas as pd
+import numpy as np
+
+df=pd.read_csv("https://github.com/wise-venture18/dsbdal/raw/refs/heads/main/3.MeasureCentralTendency/iris.csv")
+
+df.head()
+df.tail()
+df.shape
+df.info()
+
+df.describe(include="all") # include ="all" gives summary of numerical as well as categorial variables
+
+
+# -----------------------------------------------------
+#  Summary Statistics Grouped by Species
+# -----------------------------------------------------
+"""Group numeric variables by categorical variable. here numeric variables are sepal length , sepal width etc 
+and categorail variable is species.. hence we provide statistics of these numeric/ quantative variables 
+grouped by species."""
+
+grouped_data = df.groupby('species')
+
+# Mean
+print("\nMean:")
+print(grouped_data.mean())
+
+# Median
+print("\nMedian:")
+print(grouped_data.median())
+
+# Minimum
+print("\nMinimum:")
+print(grouped_data.min())
+
+# Maximum
+print("\nMaximum:")
+print(grouped_data.max())
+
+# Standard Deviation
+print("\nStandard Deviation:")
+print(grouped_data.std()
+
+
+# -----------------------------------------------------
+#  Create List for Each Species - a list that contains a numeric value for each response to the categorical variable.
+# -----------------------------------------------------
+print("\nNumeric Values Grouped by Species:")
+
+grouped_list = df.groupby('species')[
+    'sepal_length'
+].apply(list)
+
+grouped_list
+
+# -----------------------------------------------------
+# 6. Basic Statistical Details of Each Species
+# -----------------------------------------------------
+
+species_list = [
+    'setosa',
+    'versicolor',
+    'virginica'
+]
+
+for species in species_list:
+    print("\n========================") 
+    print("Species:", species) 
+    print("========================")
+    data = df[df['species'] == species] # here the data contains onyl the rows for the particular species.
+
+    print("\nMean:")
+    print(data.mean(numeric_only=True)) 
+    """Pandas automatically:
+              selects numeric columns
+              calculates mean for EACH numeric column separately"""
+
+    print("\nMedian:")
+    print(data.median(numeric_only=True))
+
+    print("\nMinimum:")
+    print(data.min(numeric_only=True))
+
+    print("\nMaximum:")
+    print(data.max(numeric_only=True))
+
+    print("\nStandard Deviation:")
+    print(data.std(numeric_only=True))
+
+    print("\nVariance:")
+    print(data.var(numeric_only=True))
