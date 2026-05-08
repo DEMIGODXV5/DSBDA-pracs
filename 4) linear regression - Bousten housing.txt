@@ -45,8 +45,8 @@ df.isnull().sum()
 # -----------------------------------------------------
 """ in boustan housing dataset - medv = house price and  all other columns = features affecting price"""
 
-# X -> independent variables
-# y -> dependent variable
+# X -> independent variables / features
+# y -> dependent variable / target feature
 
 X = df.drop('medv', axis=1)# This removes medv column from dataset. and consider all toher columns as independent variables that are used to predict y.Why drop medv from X? Because: medv 				is the target variable we want to predict, so it should not be included in input features.
 
